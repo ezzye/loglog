@@ -1,2 +1,5 @@
+![Loglog App Logo](https://github.com/ezzye/repo/blob/main/logo.png)
 # loglog
-Loglog, quickly and easily troubleshoot all your logs at the same time
+Loglog, quickly and easily troubleshoot all your logs at the same time.
+
+An innovation 10% time project.
