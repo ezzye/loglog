@@ -47,6 +47,11 @@ We aim to include unit tests.
 - [x] Unit Tests: To ensure each component works as expected.
 
 ## Security & Privacy:
+- [x] Test with BBC endpoint, see https://llama-2-13b-chat.automation.bbctest01.uk/
+- Use a local AI API if possible 
+```shell
+pip install git+https://github.com/bbc/text-generation-inference.git@add-cert-to-client#subdirectory=clients/python
+```
 - [x] Ensure sensitive data in logs is handled securely.
 - [x] Consider privacy implications of sending data to an external API.  Use a local AI API if possible.
 
