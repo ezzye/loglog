@@ -1,27 +1,42 @@
-import requests
-import json
+from text_generation import Client
 import os
 
 
-def log_analyser(input_text, cert_path):
-    api_url = os.environ.get('BBC_AI')
-    if not cert_path_:
-        raise ValueError("BBC AI|API URL environment variable 'BBC_AI' is not set.")
+def read_log(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            return file.read()
+    except Exception as e:
+        return f"Error reading log: {e}"
 
-    data = {
-        "inputs": input_text,
-        "parameters": {"max_new_tokens": 170}
-    }
-    headers = {'Content-Type': 'application/json'}
 
-    response = requests.post(api_url, headers=headers, data=json.dumps(data), cert=cert_path)
-    return response.json()
+def call_bbc_api(log_content, name_of_log="", log_type=""):
+    # Get the certificate path from an environment variable
+    cert_path = os.environ.get('COSMOS_CERT')
+    if not cert_path:
+        raise ValueError("Certificate path environment variable 'BBC_CERT_PATH' is not set.")
+
+    # Create a client instance
+    client = Client(
+        "https://llama-2-13b-chat.automation.bbctest01.uk/",
+        cert=cert_path
+    )
+
+    # Generate text using the BBC API
+    prompt = f"Analyze, explain and summarise this {log_type} log, \
+         the name of log is  {name_of_log}, in a concise and \
+         clear way. Provide a list of potential issues and solutions. Provide a list of potential \
+         issues and solutions. Provide a list of potential issues and solutions. \
+         Provide a list of potential issues and solutions. Provide a list of potential issues and \
+         solutions. Provide a list oflog  for potential issues:\n{log_content}"
+    response = client.generate(prompt, max_new_tokens=170)
+    return response.generated_text
 
 
 # Example usage
-cert_path_ = os.environ.get('COSMOS_CERT')
-if not cert_path_:
-    raise ValueError("Certificate path environment variable 'BBC_CERT_PATH' is not set.")
-
-response_ = log_analyser("How is the BBC funded?", cert_path_)
-print(response_)
+try:
+    log_content_ = read_log("/var/log/weekly.out")
+    generated_text = call_bbc_api(log_content_, "weekly.out", "Apple macbook systems log weekly")
+    print(generated_text)
+except Exception as e:
+    print(f"An error occurred: {e}")
