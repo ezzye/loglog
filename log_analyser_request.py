@@ -3,13 +3,14 @@ import json
 import os
 
 
-
 def read_log(file_path):
     try:
         with open(file_path, 'r') as file:
             return file.read()
     except Exception as e:
         return f"Error reading log: {e}"
+
+
 def log_analyser_request(log_content, name_of_log="", log_type="", cert_path=""):
     api_url = os.environ.get('BBC_AI')
     if not cert_path_:
@@ -21,7 +22,7 @@ def log_analyser_request(log_content, name_of_log="", log_type="", cert_path="")
          clear way. Provide a list of potential issues and solutions. Provide a list of potential \
          issues and solutions. Provide a list of potential issues and solutions. \
          Provide a list of potential issues and solutions. Provide a list of potential issues and \
-         solutions. Provide a list oflog  for potential issues:\n{log_content}",
+         solutions. Provide a list oflog  for potential issues:\n```{log_content}```",
         "temperature": 0.9,
         "top_p": 0.95,
         "repetition_penalty": 1.2,
@@ -41,4 +42,4 @@ if not cert_path_:
 log_content_ = read_log("/var/log/weekly.out")[0:1024]
 response_ = log_analyser_request(
     log_content_, "weekly.out", "Apple macbook systems log weekly", cert_path_)
-print(response_)
+print(response_["generated_text"])
